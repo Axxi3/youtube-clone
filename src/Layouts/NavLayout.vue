@@ -34,9 +34,12 @@
   id="SideNav"
   :class="[
     !openSideNav ? 'w-[70px]' : 'w-[240px]',
-    'sm:hidden'  // Hide on mobile devices
+    'sm:block',  // Visible on small screens and larger (except mobile)
+    'md:block'   // Ensures it's visible on larger devices as well
   ]"
 >
+  <!-- Side Navigation Content -->
+
             <ul class="mt-[60px] w-full" :class = "[!openSideNav ? 'p-2' :'px-5 pb-2 pt-[7px]']">
         <SideNavItems :openSideNav="openSideNav" iconString="Home" />
         <SideNavItems :openSideNav="openSideNav" iconString="Trending" />
