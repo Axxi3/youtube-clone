@@ -29,10 +29,14 @@
                 <img src="https://yt3.ggpht.com/8zxIp2WMba0RlbAvgoLS4Sdm5YYIOM8wm9Pnt4YOJbk0tUDwu613wpRxQGcu70BC73wfAdRTjA=s88-c-k-c0x00ffffff-no-rj" class="rounded-full mx-8" width="35" alt="">
             </div>
         </div>
-        <div class="h-[100%] fixed z-0 bg-black "
-         id="SideNav"
-         :class="[!openSideNav ? 'w-[70px]' : 'w-[240px]']"
-        >
+        <div
+  class="h-[100%] fixed z-0 bg-black"
+  id="SideNav"
+  :class="[
+    !openSideNav ? 'w-[70px]' : 'w-[240px]',
+    'sm:hidden'  // Hide on mobile devices
+  ]"
+>
             <ul class="mt-[60px] w-full" :class = "[!openSideNav ? 'p-2' :'px-5 pb-2 pt-[7px]']">
         <SideNavItems :openSideNav="openSideNav" iconString="Home" />
         <SideNavItems :openSideNav="openSideNav" iconString="Trending" />
