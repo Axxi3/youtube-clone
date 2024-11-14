@@ -11,9 +11,7 @@
                :class="show ? 'transition ease-in-out delay-150 rounded-l-lg' : 'rounded-lg', showVideo ? 'delay-350 hidden' : ''"
                alt="" >
   
-          <div class="w-full h-full aspect-video cursor-pointer" :class="showVideo ? 'delay-350 ' : 'hidden'">
-            <video ref="video" :src="videoUrl || ''" type="video/mp4"></video>
-          </div>
+         
         </div>
   
         <div class="">
