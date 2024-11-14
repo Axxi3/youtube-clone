@@ -6,6 +6,7 @@
         user="This is biker"
         views="23k - 3days ago"
         image="https://picsum.photos/id/230/100"
+        
         videoUrl='http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4'
         thumbnail="https://i.ytimg.com/vi/mDD8flMdwTg/hqdefault.jpg?sqp=-oaymwEcCOADEI4CSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLACNCY7TGUic3fZaIV1zYiyec06eA"
         />
@@ -17,6 +18,7 @@
     :thumbnail="video.thumbnail?.[0]?.url || 'https://via.placeholder.com/360x202'"
     :image="video.channelThumbnail?.[0]?.url || 'https://via.placeholder.com/360x202'"
      :views="`${formatNumber(video.viewCount)} ${video.publishedTimeText}` || 'N/A'"
+       @click="goToVideo(video.videoId)"
   />
         
   
@@ -29,8 +31,12 @@ import { onMounted, ref } from 'vue';
 
 import VideoCard from '../components/VideoCard.vue';
 import NavLayout from '../Layouts/NavLayout.vue';
+import { useRouter } from 'vue-router';
+const router = useRouter();
 
-
+function goToVideo(videoId) {
+    router.push({ name: 'Video', params: { id: videoId } });
+}
 
 function formatNumber(value) {
   if(value !== null){
