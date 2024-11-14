@@ -128,7 +128,7 @@ import { defineProps, toRefs,ref, computed } from 'vue';
 
 const isMobile = computed(() => window.innerWidth <640); 
 console.log("is this mobile" + isMobile.value)
-let openSideNav = ref(true);
+let openSideNav = ref(false);
 
 </script>
 
