@@ -1,38 +1,41 @@
 <template>
     <NavLayout>
       <!-- Banner Section -->
-      <div
-        class="banner h-36 md:h-48 lg:h-60 bg-cover bg-center relative"
-        :style="{ backgroundImage: 'url(https://yt3.googleusercontent.com/8mCxFaL_cBotHhN4ItCylQ4G0ExhO3HsdGMZK7OprAU_HCovOQoeCqEqw31IvSBWiAxWA1EFbW0=w1060-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj)' }"
-      >
-        <div class="absolute inset-0 bg-black bg-opacity-30"></div>
-      </div>
-  
-      <!-- Loading Text -->
       <div v-if="loading" class="flex justify-center items-center h-96 text-white text-2xl">
         Loading, please wait...
       </div>
+      <div v-if="!loading"
+     class="banner h-36 md:h-48 lg:h-60 bg-cover bg-center relative"
+     :style="{ backgroundImage: `url(${ChannelData.meta.banner[0].url})` }">
+  <div class="absolute inset-0 bg-black bg-opacity-30"></div>
+</div>
+  
+      <!-- Loading Text -->
   
       <!-- Profile Section -->
-      <div v-if="!loading" class="flex items-center px-6 pt-6">
-        <img
-          :src="ChannelData.meta.avatar[0].url"
-          alt="Profile"
-          class="w-32 h-32 rounded-full border-4 border-gray-800"
-        />
-  
-        <div class="ml-6">
-          <h1 class="text-3xl font-semibold text-white">{{ ChannelData.meta.title || ' ' }}</h1>
-          <p class="text-gray-700 text-lg">{{ ChannelData.meta.subscriberCountText }} subscribers</p>
-          <a href="https://instagram.com/" class="text-blue-500 hover:underline mt-1 text-lg">
-            {{ ChannelData.meta.channelHandle }}
-          </a>
-        </div>
-  
-        <button class="ml-auto bg-red-500 hover:bg-red-600 rounded-2xl text-white font-semibold px-6 py-3">
-          Subscribe
-        </button>
-      </div>
+<div v-if="!loading" class="flex flex-col sm:flex-row items-center px-6 pt-6 space-y-4 sm:space-y-0">
+  <!-- Profile Image -->
+  <img
+    :src="ChannelData.meta.avatar[0].url"
+    alt="Profile"
+    class="w-24 h-24 sm:w-32 sm:h-32 rounded-full border-4 border-gray-800 mx-auto sm:mx-0"
+  />
+
+  <!-- Profile Information -->
+  <div class="sm:ml-6 text-center sm:text-left">
+    <h1 class="text-2xl sm:text-3xl font-semibold text-white">{{ ChannelData.meta.title || ' ' }}</h1>
+    <p class="text-gray-700 text-sm sm:text-lg">{{ ChannelData.meta.subscriberCountText }} subscribers</p>
+    <a href="https://instagram.com/" class="text-blue-500 hover:underline mt-1 text-sm sm:text-lg">
+      {{ ChannelData.meta.channelHandle }}
+    </a>
+  </div>
+
+  <!-- Subscribe Button -->
+  <button class="mt-4 sm:mt-0 sm:ml-auto bg-red-500 hover:bg-red-600 rounded-2xl text-white font-semibold px-4 py-2 sm:px-6 sm:py-3">
+    Subscribe
+  </button>
+</div>
+
   
       <!-- Recommended Videos Section -->
       <div v-if="!loading" class="p-2" @click="goToVideo(ChannelData.data[0].videoId)">
@@ -116,9 +119,11 @@
       console.log("calling API...");
       const response = await fetch(url, options);
       const result = await response.json();
-      console.log("API response:", result); // Log full response to inspect
+      console.log("API response:", result); 
+      // Log full response to inspect
       if (result && result.data) {
         ChannelData.value = result; // Store data in ChannelData if it exists
+        console.log(ChannelData.value.meta.banner[0].url)
       } else {
         console.error("No data found in the response");
       }

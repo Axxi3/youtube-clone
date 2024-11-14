@@ -2,13 +2,14 @@
     <div class="relative top-0">
         <div class="w-[100%] h-[60px] top-0  fixed bg-black z-20 flex items-center justify-between" id="TopNav ">
             <div class="flex items-center">
-                <button class="p-2 ml-3 rounded-full hover:bg-gray-500 inline-block cursor-pointer"
+                <button class="p-2 ml-3 rounded-full hover:bg-gray-500  cursor-pointer hidden sm:block"
                 @click="openSideNav = !openSideNav">
                     <MenuIcon fillColor="#FFFFFF" :size="26"/>
                 </button>
                 <div class="mx-2"></div>
                 <div class="flex items-center justify-center text-white mr-10 cursor-pointer">
-                    YOUTUBE
+                    <img width="32" src="/src/assets/YT-logo.png" alt="YouTube Logo">
+                    <img width="62" src="/src/assets/YT-logo-text.png" alt="YouTube Logo Text">
                 </div>
             </div>
 
@@ -34,8 +35,7 @@
   id="SideNav"
   :class="[
     !openSideNav ? 'w-[70px]' : 'w-[240px]',
-    'sm:block',  // Visible on small screens and larger (except mobile)
-    'md:block'   // Ensures it's visible on larger devices as well
+    'hidden sm:block' // This hides on mobile and shows on small screens (640px and up)
   ]"
 >
   <!-- Side Navigation Content -->
@@ -43,6 +43,10 @@
             <ul class="mt-[60px] w-full" :class = "[!openSideNav ? 'p-2' :'px-5 pb-2 pt-[7px]']">
         <SideNavItems :openSideNav="openSideNav" iconString="Home" />
         <SideNavItems :openSideNav="openSideNav" iconString="Trending" />
+        <SideNavItems :openSideNav="openSideNav" iconString="Gaming" />
+        <SideNavItems :openSideNav="openSideNav" iconString="Music" />
+        <SideNavItems :openSideNav="openSideNav" iconString="News" />
+        <div class="border-b border-b-gray-700 my-2.5"></div>
         <SideNavItems :openSideNav="openSideNav" iconString="Subscriptions" />
         <SideNavItems :openSideNav="openSideNav" iconString="Liked" />
         <SideNavItems :openSideNav="openSideNav" iconString="Watch Later" />
@@ -69,11 +73,23 @@
         </div>
 
         <div
-    :style="{ width: openSideNav ? 'calc(100% - 240px)' : 'calc(100% - 70px)' }"
-    class="h-[calc(100vh-60px)] absolute right-0 top-[60px]"
+        v-if="!isMobile"
+        :style="{
+    width:  (openSideNav ? 'calc(100% - 240px)' : 'calc(100% - 70px)')
+  }"
+    class="h-[calc(100vh-60px)] absolute right-0 top-[35px]"
 >
     <slot></slot>  
 </div>
+
+<div
+       v-else
+        
+    class="h-[calc(100vh-60px)] absolute right-0 top-[30px] w-full"
+>
+    <slot></slot>  
+</div>
+<!-- fix the navabr im mobole -->
     </div>
 </template>
 
@@ -83,8 +99,11 @@ import MagnifyIcon from "vue-material-design-icons/Magnify.vue"
 
 import SideNavItems from "../components/SideNavItems.vue";
 
-import { defineProps, toRefs,ref } from 'vue';
 
+import { defineProps, toRefs,ref, computed } from 'vue';
+
+const isMobile = computed(() => window.innerWidth <640); 
+console.log("is this mobile" + isMobile.value)
 let openSideNav = ref(true);
 
 </script>

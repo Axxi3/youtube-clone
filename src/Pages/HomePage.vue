@@ -1,7 +1,7 @@
 
 <template>
     <NavLayout>
-      <div class="grid 2xl:grid-cols-5 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-3 sm:grid-cols-2 mr-3.5 pt-4">
+      <div class="grid 2xl:grid-cols-5 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-3 sm:grid-cols-2 sm:mr-3.5 pt-4">
         <VideoCard title="Moment Aiden Fucci learns he will spend the rest of life in prison for murder of Tristyn Bailey"
         user="This is biker"
         views="23k - 3days ago"
@@ -35,9 +35,9 @@ import NavLayout from '../Layouts/NavLayout.vue';
 function formatNumber(value) {
   if(value !== null){
     if (value >= 1000000) {
-        return (value / 1000000).toFixed(1).replace(/\.0$/, '') + 'm';
+        return (value / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
     } else if (value >= 1000) {
-        return (value / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
+        return (value / 1000).toFixed(1).replace(/\.0$/, '') + 'K';
     } else {
         return value.toString();
     }

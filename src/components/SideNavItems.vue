@@ -27,6 +27,11 @@ import ClockOutline from 'vue-material-design-icons/ClockOutline.vue';
 import VideoPlusOutlineIcon from 'vue-material-design-icons/VideoPlusOutline.vue';
 import DeleteIcon from 'vue-material-design-icons/Delete.vue';
 import TrendingUp from 'vue-material-design-icons/TrendingUp.vue';
+import CoursesIcon from 'vue-material-design-icons/Book.vue';
+import MoviesIcon from 'vue-material-design-icons/Filmstrip.vue';
+import GamingIcon from 'vue-material-design-icons/Gamepad.vue';
+import MusicIcon from 'vue-material-design-icons/Music.vue';
+import NewsIcon from 'vue-material-design-icons/Newspaper.vue';
 
 const props = defineProps({
     openSideNav: Boolean,
@@ -44,9 +49,11 @@ if (iconString.value === 'Library') icon = ImageMultiple;
 if (iconString.value === 'Liked') icon = ThumbUpOutline;
 if (iconString.value === 'History') icon = History;
 if (iconString.value === 'Watch Later') icon = ClockOutline;
-if (iconString.value === 'Add Video') icon = VideoPlusOutlineIcon;
-if (iconString.value === 'Delete Video') icon = DeleteIcon;
 if (iconString.value === 'Trending') icon = TrendingUp;
+if (iconString.value === 'Gaming') icon = GamingIcon;
+if (iconString.value === 'Music') icon = MusicIcon;
+if (iconString.value === 'News') icon = NewsIcon;
+
 
 function navigateToPath() {
     let path = '/';
@@ -71,9 +78,15 @@ function navigateToPath() {
             break;
         case 'Watch Later':
             path = '/watch-later';
+            break;  
+               case 'Gaming':
+            path = '/gaming';
             break;
         case 'Add Video':
             path = '/add-video';
+            break;
+            case 'Music':
+            path = '/music';
             break;
         case 'Delete Video':
             path = '/delete-video';

@@ -40,7 +40,7 @@
                   
             <div class="bg-[#3f3f3f] rounded-lg w-full p-3 text-white" id="Comment Section">
               <div class="text-white text-lg font-extrabold">1k views - 3 days ago</div>
-              <div class="text-sm font-extrabold">
+              <div class="text-sm font-regular">
                 {{ videoData.description }}
               </div>
             </div>

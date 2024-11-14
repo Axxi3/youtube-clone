@@ -24,8 +24,8 @@
                    alt="">
             </div>
             <div class="px-1.5 text-white mt-1">
-              <div class="text-[17px] font-bold  w-full cursor-pointer">
-                {{ (title || '').substring(0, 50) }}
+              <div class="text-[17px] font-semibold  w-full cursor-pointer">
+                {{ (title || '').substring(0, 20) }}
               </div>
               <div class="text-[14px] text-gray-300 font-extrabold flex gap-1 items-center cursor-pointer">
                 {{ (user || '').substring(0, 30) }}

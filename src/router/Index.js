@@ -4,6 +4,8 @@ import Video from '../Pages/Video.vue';
 import Trending from '../Pages/Trending.vue';
 import ChannelHome from '../Pages/ChannelHome.vue';
 import ChannelVideosPage from '../Pages/ChannelVideosPage.vue';
+import Gaming from '../Pages/Gaming.vue';
+import Music from '../Pages/Music.vue';
 
 const routes = [
   {
@@ -25,6 +27,17 @@ const routes = [
     path: '/channel/:id',
     name: 'Channel',
     component: ChannelHome,
+  },
+
+  {
+    path: '/gaming',
+    name: 'Gaming',
+    component: Gaming,
+  },
+  {
+    path: '/music',
+    name: 'Music',
+    component: Music,
   },
   {
     path: '/channel/videos/:id',
