@@ -2,7 +2,7 @@
     <div class="relative top-0">
         <div class="w-[100%] h-[60px] top-0  fixed bg-black z-20 flex items-center justify-between" id="TopNav ">
             <div class="flex items-center">
-                <button class="p-2 ml-3 rounded-full hover:bg-gray-500  cursor-pointer hidden sm:block"
+                <button class="p-2 ml-3 rounded-full hover:bg-gray-500  cursor-pointer block"
                 @click="openSideNav = !openSideNav">
                     <MenuIcon fillColor="#FFFFFF" :size="26"/>
                 </button>
@@ -68,9 +68,33 @@
     </ul>
         </div>
 
-        <div class="" id="SidenavOverlay">
-          
+        <div
+      v-if="isMobile && openSideNav"
+      class="fixed inset-0 z-40 bg-black w-[240px] top-[55px] h-full transition-transform duration-300"
+    >
+      <ul class="mt-[60px] w-full px-5 pb-2 pt-[7px]">
+        <SideNavItems :openSideNav="openSideNav" iconString="Home" />
+        <SideNavItems :openSideNav="openSideNav" iconString="Trending" />
+        <SideNavItems :openSideNav="openSideNav" iconString="Gaming" />
+        <SideNavItems :openSideNav="openSideNav" iconString="Music" />
+        <SideNavItems :openSideNav="openSideNav" iconString="News" />
+        <div class="border-b border-b-gray-700 my-2.5"></div>
+        <SideNavItems :openSideNav="openSideNav" iconString="Subscriptions" />
+        <SideNavItems :openSideNav="openSideNav" iconString="Liked" />
+        <SideNavItems :openSideNav="openSideNav" iconString="Watch Later" />
+        <div v-if="openSideNav" class="text-gray-400 text-[14px] font-extrabold mt-2">
+          <div>About Press Copyright</div>
+          <div>Contact Us</div>
+          <div>Creator Advertise Developers</div>
         </div>
+        <div v-if="openSideNav" class="border-b border-b-gray-700 my-2.5"></div>
+        <div v-if="openSideNav" class="text-gray-400 text-[14px] font-extrabold">
+          <div>Terms Privacy Policy & Safety</div>
+          <div>How YouTube Works</div>
+          <span>Test New features</span>
+        </div>
+      </ul>
+    </div>
 
         <div
         v-if="!isMobile"

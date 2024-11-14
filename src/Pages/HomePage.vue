@@ -2,14 +2,7 @@
 <template>
     <NavLayout>
       <div class="grid 2xl:grid-cols-5 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-3 sm:grid-cols-2 sm:mr-3.5 pt-4">
-        <VideoCard title="Moment Aiden Fucci learns he will spend the rest of life in prison for murder of Tristyn Bailey"
-        user="This is biker"
-        views="23k - 3days ago"
-        image="https://picsum.photos/id/230/100"
         
-        videoUrl='http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4'
-        thumbnail="https://i.ytimg.com/vi/mDD8flMdwTg/hqdefault.jpg?sqp=-oaymwEcCOADEI4CSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLACNCY7TGUic3fZaIV1zYiyec06eA"
-        />
         <VideoCard 
         
     v-for="(video, index) in videoData"

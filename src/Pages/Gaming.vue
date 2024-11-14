@@ -10,6 +10,7 @@
     :image="video.channelThumbnail?.[0]?.url || 'https://via.placeholder.com/360x202'"
     :views="`${formatNumber(video.viewCount)} ${video.publishedTimeText}`"
     :videoUrl = "playlink(video.videoId)"
+    :user = "video.channelTitle"
     @click="goToVideo(video.videoId)"
 />
         
