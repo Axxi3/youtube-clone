@@ -2,7 +2,7 @@
     <div class="relative">
       <div class="rounded-lg bg-black m-2 "
            :class ="[
-             show ? 'absolute z-30 transition ease-in-out delay-150 hover:translate-y-8 hover:scale-125 hover:bg-[#202020] duration-300' : ''
+             show ? 'absolute z-30 transition ease-in-out delay-150 duration-300' : ''
            ]">
   
         <div class="" @mouseover="show = true" @mouseleave="show = false; showVideo = false">
