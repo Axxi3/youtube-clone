@@ -26,7 +26,7 @@
              @click="gotoChannelHome(videoData.channelId)"
             class="flex items-center mb-4" id="Channel Name">
               <img class="rounded-full m-1.5 mt-2 flex items-baseline w-8 h-8"
-                :src="'https://picsum.photos/id/' + (Math.random() * 100).toFixed(0) + '/100'"
+                :src="'https://picsum.photos/id/' + (Math.random() * 100).toFixed(0)+ '/100'"
                 alt=""
               />
               <div class="pl-2 text-white mt-1">
