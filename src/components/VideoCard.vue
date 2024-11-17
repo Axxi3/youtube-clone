@@ -5,7 +5,7 @@
              show ? 'absolute z-30 transition ease-in-out delay-150 duration-300' : ''
            ]">
   
-        <div class="" @mouseover="show = true" @mouseleave="show = false; showVideo = false">
+        <div class="" >
           <img :src="thumbnail || ''"
                class="aspect-video cursor-pointer mr-3 w-[100%]"
                :class="show ? 'transition ease-in-out delay-150 rounded-l-lg' : 'rounded-lg', showVideo ? 'delay-350 hidden' : ''"
