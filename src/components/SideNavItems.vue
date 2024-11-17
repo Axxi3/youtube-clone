@@ -62,34 +62,34 @@ function navigateToPath() {
             path = '/';
             break;
         case 'Trending':
-            path = '/trending';
+            path = '/';
             break;
         case 'Subscriptions':
-            path = '/subscriptions';
+            path = '/';
             break;
         case 'Library':
-            path = '/library';
+            path = '/';
             break;
         case 'Liked':
-            path = '/liked';
+            path = '/';
             break;
         case 'History':
-            path = '/history';
+            path = '/';
             break;
         case 'Watch Later':
-            path = '/watch-later';
+            path = '/';
             break;  
                case 'Gaming':
-            path = '/gaming';
+            path = '/';
             break;
         case 'Add Video':
-            path = '/add-video';
+            path = '/';
             break;
             case 'Music':
-            path = '/music';
+            path = '/';
             break;
         case 'Delete Video':
-            path = '/delete-video';
+            path = '/';
             break;
     }
     router.push(path);

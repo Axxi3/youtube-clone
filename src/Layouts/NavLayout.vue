@@ -16,14 +16,27 @@
 
             <div class="w-[600px]  md:block hidden">
                 <div class="rounded-full flex items-center bg-[#222222]">
-                    <input
-                    type="text"
-                    class="form-control block w-full text-gray-200 px-5 py-1.5 text-base font-normal bg-black placeholder-gray-400
-                    bg-clip-padding border border-solid border-l-gray-400 border-y-gray-700 rounded-l-full transition ease-in-out m-0 border-transparent
-                    focus:ring-0 "
-                    />
-                    <MagnifyIcon class="mx-6" fillColor="#FFFFFF" :size="23"/>
-                </div>
+               <!-- Input Field -->
+    <input
+      type="text"
+      v-model="searchText"
+      class="form-control block w-full text-gray-200 px-5 py-1.5 text-base font-normal bg-black placeholder-gray-400
+      bg-clip-padding border border-solid border-l-gray-400 border-y-gray-700 rounded-l-full transition ease-in-out m-0 border-transparent
+      focus:ring-0"
+      placeholder="Type here..."
+    />
+
+    <!-- Magnify Icon as Button -->
+    <div
+      @click="handleSearch"
+      class="mx-6 cursor-pointer flex items-center justify-center"
+    >
+      <MagnifyIcon fillColor="#FFFFFF" :size="23" />
+    </div>
+    
+   
+</div>
+ 
             </div>
 
             <div >
@@ -40,39 +53,72 @@
 >
   <!-- Side Navigation Content -->
 
-            <ul class="mt-[60px] w-full" :class = "[!openSideNav ? 'p-2' :'px-5 pb-2 pt-[7px]']">
-        <SideNavItems :openSideNav="openSideNav" iconString="Home" />
-        <SideNavItems :openSideNav="openSideNav" iconString="Trending" />
-        <SideNavItems :openSideNav="openSideNav" iconString="Gaming" />
-        <SideNavItems :openSideNav="openSideNav" iconString="Music" />
-        <SideNavItems :openSideNav="openSideNav" iconString="News" />
-        <div class="border-b border-b-gray-700 my-2.5"></div>
-        <SideNavItems :openSideNav="openSideNav" iconString="Subscriptions" />
-        <SideNavItems :openSideNav="openSideNav" iconString="Liked" />
-        <SideNavItems :openSideNav="openSideNav" iconString="Watch Later" />
-        <div class="" v-if="openSideNav">
-            <div class="border-b border-b-gray-700 my-2.5"></div>
-            <div class="text-gray-400 text-[14px] text-extrabold">
-            About Press Copyright
-            <div>Contact Us</div>
-            Creator Advertise Developers
-        </div>
-        <div class="border-b border-b-gray-700 my-2.5"></div>
-        <div class="text-gray-400 text-[14px] text-extrabold">
-            Terms Privacy Policy & Safety
-            <div>How Youtube Works</div>
-            <span>Test Now features</span>
-        </div>
-        </div>
-        
-    </ul>
+  <ul
+  class="sm:mt-[60px] mt-[30px] w-full"
+  :class="[!openSideNav ? 'p-2' : 'px-5 pb-2 pt-[7px]']"
+>
+  
+
+  <!-- Sidebar Items -->
+  <SideNavItems :openSideNav="openSideNav" iconString="Home" />
+  <SideNavItems :openSideNav="openSideNav" iconString="Trending" />
+  <SideNavItems :openSideNav="openSideNav" iconString="Gaming" />
+  <SideNavItems :openSideNav="openSideNav" iconString="Music" />
+  <SideNavItems :openSideNav="openSideNav" iconString="News" />
+  <div class="border-b border-b-gray-700 my-2.5"></div>
+  <SideNavItems :openSideNav="openSideNav" iconString="Subscriptions" />
+  <SideNavItems :openSideNav="openSideNav" iconString="Liked" />
+  <SideNavItems :openSideNav="openSideNav" iconString="Watch Later" />
+
+  <!-- Additional Items -->
+  <div v-if="openSideNav">
+    <div class="border-b border-b-gray-700 my-2.5"></div>
+    <div class="text-gray-400 text-[14px] text-extrabold">
+      About Press Copyright
+      <div>Contact Us</div>
+      Creator Advertise Developers
+    </div>
+    <div class="border-b border-b-gray-700 my-2.5"></div>
+    <div class="text-gray-400 text-[14px] text-extrabold">
+      Terms Privacy Policy & Safety
+      <div>How YouTube Works</div>
+      <span>Test New Features</span>
+    </div>
+  </div>
+</ul>
+
         </div>
 
         <div
       v-if="isMobile && openSideNav"
       class="fixed inset-0 z-40 bg-black w-[240px] top-[55px] h-full transition-transform duration-300"
     >
-      <ul class="mt-[60px] w-full px-5 pb-2 pt-[7px]">
+      <ul class="mt-[20px] w-full px-5 pb-2 pt-[7px]">
+        <div class="w-full sm:hidden inline-block">
+    <!-- Visible only on mobile -->
+    <div
+      class="flex items-center rounded-full bg-[#222222] mb-3"
+    >
+ 
+      <!-- Input Field -->
+      <input
+        type="text"
+        v-model="searchText"
+        class="form-control block w-full text-gray-200 px-5 py-1.5 text-base font-normal bg-black placeholder-gray-400
+        bg-clip-padding border border-solid border-l-gray-400 border-y-gray-700 rounded-l-full transition ease-in-out m-0 border-transparent
+        focus:ring-0"
+        placeholder="Type here..."
+      />
+
+      <!-- Magnify Icon as Button -->
+      <div
+        @click="handleSearch"
+        class="mx-6 cursor-pointer flex items-center justify-center"
+      >
+        <MagnifyIcon fillColor="#FFFFFF" :size="23" />
+      </div>
+    </div>
+  </div>
         <SideNavItems :openSideNav="openSideNav" iconString="Home" />
         <SideNavItems :openSideNav="openSideNav" iconString="Trending" />
         <SideNavItems :openSideNav="openSideNav" iconString="Gaming" />
@@ -125,10 +171,43 @@ import SideNavItems from "../components/SideNavItems.vue";
 
 
 import { defineProps, toRefs,ref, computed } from 'vue';
+import { useRouter } from "vue-router";
+
+
+const searchText = ref('');
+
+const router = useRouter();
+
+function goToVideo(videoId) {
+    router.push({ name: 'Search', params: { id: searchText } });
+}
+
 
 const isMobile = computed(() => window.innerWidth <640); 
 console.log("is this mobile" + isMobile.value)
 let openSideNav = ref(false);
+
+
+function handleSearch() {
+  if (!searchText.value.trim()) {
+   
+    console.warn('Search query is empty'); // Handle empty input
+    return;
+  }
+  router.push({ name: 'Search', params: { query: searchText.value} });
+  
+  console.log('Search query:', searchText.value);
+  
+
+  // Add your search logic here, e.g., making an API call or redirecting
+  // this.performSearch(searchText.value);
+}
+
+
+// performSearch(query) {
+//   console.log(`Performing search for: ${query}`);
+//   // Add API calls or navigation logic here
+// }
 
 </script>
 

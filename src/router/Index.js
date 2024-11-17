@@ -1,11 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import HomePage from '../Pages/HomePage.vue';
 import Video from '../Pages/Video.vue';
-import Trending from '../Pages/Trending.vue';
+
 import ChannelHome from '../Pages/ChannelHome.vue';
 import ChannelVideosPage from '../Pages/ChannelVideosPage.vue';
-import Gaming from '../Pages/Gaming.vue';
-import Music from '../Pages/Music.vue';
+
+import Search from '../Pages/Search.vue';
 
 const routes = [
   {
@@ -13,11 +13,7 @@ const routes = [
     name: 'Home',
     component: HomePage,
   },
-  {
-    path: '/trending',
-    name:"Trending",
-    component:Trending,
-  },
+ 
   {
     path: '/:id',
     name: 'Video',
@@ -29,21 +25,18 @@ const routes = [
     component: ChannelHome,
   },
 
-  {
-    path: '/gaming',
-    name: 'Gaming',
-    component: Gaming,
-  },
-  {
-    path: '/music',
-    name: 'Music',
-    component: Music,
-  },
+  
+  
   {
     path: '/channel/videos/:id',
     name: 'ChannelVideos',
     component: ChannelVideosPage,
   },
+  {
+    path: '/search/:query',
+    name: 'Search',
+    component: Search,
+  }
 
 ];
 

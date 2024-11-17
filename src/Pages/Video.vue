@@ -1,6 +1,8 @@
 <template>
     <div v-if="loading">
-      <p>Loading...</p> <!-- You can replace this with a spinner component if needed -->
+     <div class="w-[90vw] h-[90vh] flex items-center justify-center">
+      <img :src="loader" alt="" sizes="30">
+     </div> <!-- You can replace this with a spinner component if needed -->
     </div> 
   
     <div v-else>
@@ -103,6 +105,7 @@
   import ThumbUpOutline from 'vue-material-design-icons/ThumbUpOutline.vue'
    import CheckCircle from 'vue-material-design-icons/CheckCircle.vue'
     import ThumbDownOutline from 'vue-material-design-icons/ThumbDownOutline.vue'
+    import loader from "../assets/loader.gif"
   
   const route = useRoute();
   const router = useRouter();
