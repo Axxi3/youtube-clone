@@ -23,7 +23,9 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineProps } from 'vue';
+
 export default {
   props: {
     thumbnail: {
@@ -58,6 +60,27 @@ export default {
       type: String,
       default: "",
     },
+  },
+  setup(props) {
+    // Destructuring props for easier access
+    const { thumbnail, title, channelName, views, uploadTime, duration, isVerified, description } = props;
+
+    // Arrow functions can be used for computed values or methods if needed
+    const formattedDuration = () => {
+      // Here you could format the duration if necessary
+      return duration;
+    };
+
+    return {
+      thumbnail,
+      title,
+      channelName,
+      views,
+      uploadTime,
+      duration: formattedDuration(),
+      isVerified,
+      description,
+    };
   },
 };
 </script>

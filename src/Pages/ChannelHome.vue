@@ -1,154 +1,158 @@
 <template>
-    <NavLayout>
-      <!-- Banner Section -->
-      <div v-if="loading" class="flex justify-center items-center h-96 text-white text-2xl">
-        Loading, please wait...
-      </div>
-      <div v-if="!loading"
-     class="banner h-36 md:h-48 lg:h-60 bg-cover bg-center relative"
-     :style="{ backgroundImage: `url(${ChannelData.meta.banner[0].url})` }">
-  <div class="absolute inset-0 bg-black bg-opacity-30"></div>
-</div>
-  
-      <!-- Loading Text -->
-  
-      <!-- Profile Section -->
-<div v-if="!loading" class="flex flex-col sm:flex-row items-center px-6 pt-6 space-y-4 sm:space-y-0">
-  <!-- Profile Image -->
-  <img
-    :src="ChannelData.meta.avatar[0].url"
-    alt="Profile"
-    class="w-24 h-24 sm:w-32 sm:h-32 rounded-full border-4 border-gray-800 mx-auto sm:mx-0"
-  />
+  <NavLayout>
+    <!-- Banner Section -->
+    <div v-if="loading" class="flex justify-center items-center h-96 text-white text-2xl">
+      Loading, please wait...
+    </div>
+    <div
+      v-if="!loading && ChannelData?.meta?.banner?.[0]?.url"
+      class="banner h-36 md:h-48 lg:h-60 bg-cover bg-center relative"
+      :style="{ backgroundImage: `url(${ChannelData?.meta?.banner?.[0]?.url ?? ''})` }"
+    >
+      <div class="absolute inset-0 bg-black bg-opacity-30"></div>
+    </div>
 
-  <!-- Profile Information -->
-  <div class="sm:ml-6 text-center sm:text-left">
-    <h1 class="text-2xl sm:text-3xl font-semibold text-white">{{ ChannelData.meta.title || ' ' }}</h1>
-    <p class="text-gray-700 text-sm sm:text-lg">{{ ChannelData.meta.subscriberCountText }} subscribers</p>
-    <a href="https://instagram.com/" class="text-blue-500 hover:underline mt-1 text-sm sm:text-lg">
-      {{ ChannelData.meta.channelHandle }}
-    </a>
-  </div>
-
-  <!-- Subscribe Button -->
-  <button class="mt-4 sm:mt-0 sm:ml-auto bg-red-500 hover:bg-red-600 rounded-2xl text-white font-semibold px-4 py-2 sm:px-6 sm:py-3">
-    Subscribe
-  </button>
-</div>
-
-  
-      <!-- Recommended Videos Section -->
-      <div v-if="!loading" class="p-2" @click="goToVideo(ChannelData.data[0].videoId)">
-        <h2 class="text-2xl font-semibold mt-8 pl-5 text-white">Latest Video</h2>
-        <VideoPreview
-          :thumbnail="ChannelData.data[0].thumbnail[0].url"
-          :title="ChannelData.data[0].title"
-          :channelName="ChannelData.meta.title"
-          :views="formatNumber(ChannelData.data[0].viewCount)"
-          :uploadTime="ChannelData.data[0].publishedTimeText"
-          duration="13:02"
-          isVerified
-         
-          description="My11Circle App: https://bit.ly/3MfaJn0 Use my exclusive coupon: YT2022 to get additional 20% extra cash on first deposit..."
-           
-        />
+    <!-- Profile Section -->
+    <div v-if="!loading && ChannelData" class="flex flex-col sm:flex-row items-center px-6 pt-6 space-y-4 sm:space-y-0">
+      <img
+        :src="ChannelData?.meta?.avatar?.[0]?.url ?? ''"
+        alt="Profile"
+        class="w-24 h-24 sm:w-32 sm:h-32 rounded-full border-4 border-gray-800 mx-auto sm:mx-0"
+      />
+      <div class="sm:ml-6 text-center sm:text-left">
+        <h1 class="text-2xl sm:text-3xl font-semibold text-white">
+          {{ ChannelData?.meta?.title ?? ' ' }}
+        </h1>
+        <p class="text-gray-700 text-sm sm:text-lg">
+          {{ ChannelData?.meta?.subscriberCountText ?? '' }} subscribers
+        </p>
+        <a href="https://instagram.com/" class="text-blue-500 hover:underline mt-1 text-sm sm:text-lg">
+          {{ ChannelData?.meta?.channelHandle ?? '' }}
+        </a>
       </div>
-  
-      <!-- More Content -->
-      <div v-if="!loading" class="w-full flex items-center justify-between pr-5">
-        <h2 class="text-2xl font-semibold mt-8 pl-5 text-white">Latest Video</h2>
-        <p class="text-white" @click="gotoChannelvideos()">See more</p>
-      </div>
-  
-      <!-- Video Cards -->
-      <div v-if="!loading" class="grid 2xl:grid-cols-5 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-3 sm:grid-cols-2 mr-3.5 pt-4">
-        <VideoCard
-          v-for="(video, index) in ChannelData.data"
-          :key="index"
-          :title="video.title"
-          :user="video.channelTitle"
-          :views="video.viewCount + ' - ' + video.publishedTimeText"
-          :thumbnail="video.thumbnail[0].url"
-          :videoUrl="video.videoUrl"
-         @click="goToVideo(video.videoId)"
-        />
-      </div>
-    </NavLayout>
-  </template>
-  
-  
-  <script setup>
-  import VideoPreview from '../components/VideoPreview.vue';
-  import RecomendedVideos from '../components/RecomendedVideos.vue';
-  import NavLayout from '../Layouts/NavLayout.vue';
-  import ChannelVideos from '../components/ChannelVideos.vue';
-  import VideoCard from '../components/VideoCard.vue';
-  import { onMounted, ref } from 'vue';
-  import { useRoute, useRouter } from 'vue-router';
-  
-  const route = useRoute();
-  const router = useRouter();
-  const channelID = ref(route.params.id);
-  console.log("channel Home" + channelID.value);
-  
-  const ChannelData = ref({}); // Reactive video data
-  const loading = ref(true); // Loading state
+      <button
+        class="mt-4 sm:mt-0 sm:ml-auto bg-red-500 hover:bg-red-600 rounded-2xl text-white font-semibold px-4 py-2 sm:px-6 sm:py-3"
+      >
+        Subscribe
+      </button>
+    </div>
 
-  function formatNumber(value) {
-    if (value >= 1000000) {
-        return (value / 1000000).toFixed(1).replace(/\.0$/, '') + 'm';
-    } else if (value >= 1000) {
-        return (value / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
-    } else {
-        return value.toString();
-    }
+    <!-- Recommended Videos Section -->
+    <div v-if="!loading && ChannelData?.data?.[0]" class="p-2" @click="goToVideo(ChannelData.data[0]?.videoId)">
+      <h2 class="text-2xl font-semibold mt-8 pl-5 text-white">Latest Video</h2>
+      <VideoPreview
+        :thumbnail="ChannelData?.data?.[0]?.thumbnail?.[0]?.url ?? ''"
+        :title="ChannelData?.data?.[0]?.title ?? ''"
+        :channelName="ChannelData?.meta?.title ?? ''"
+        :views="formatNumber(ChannelData?.data?.[0]?.viewCount ?? 0)"
+        :uploadTime="ChannelData?.data?.[0]?.publishedTimeText ?? ''"
+        duration="13:02"
+        isVerified
+        description="My11Circle App: https://bit.ly/3MfaJn0 Use my exclusive coupon: YT2022 to get additional 20% extra cash on first deposit..."
+      />
+    </div>
+
+    <!-- More Content -->
+    <div v-if="!loading" class="w-full flex items-center justify-between pr-5">
+      <h2 class="text-2xl font-semibold mt-8 pl-5 text-white">Latest Video</h2>
+      <p class="text-white" @click="gotoChannelVideos(channelID)">See more</p>
+    </div>
+
+    <!-- Video Cards -->
+    <div v-if="!loading && ChannelData?.data" class="grid 2xl:grid-cols-5 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-3 sm:grid-cols-2 mr-3.5 pt-4">
+      <VideoCard
+        v-for="(video, index) in ChannelData?.data"
+        :key="index"
+        :title="video.title"
+        :user="video.channelTitle"
+        :views="video.viewCount + ' - ' + video.publishedTimeText"
+        :thumbnail="video.thumbnail?.[0]?.url ?? ''"
+        :videoUrl="video.videoUrl"
+        @click="goToVideo(video.videoId)"
+      />
+    </div>
+  </NavLayout>
+</template>
+
+
+<script lang="ts" setup>
+import VideoPreview from '../components/VideoPreview.vue';
+import NavLayout from '../Layouts/NavLayout.vue';
+import VideoCard from '../components/VideoCard.vue';
+import { onMounted, ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+
+interface Video {
+  videoId: string;
+  title: string;
+  thumbnail: { url: string }[];
+  channelTitle: string;
+  viewCount: number;
+  publishedTimeText: string;
+  videoUrl: string;
 }
-  
+
+interface ChannelMeta {
+  avatar: { url: string }[];
+  banner: { url: string }[];
+  title: string;
+  subscriberCountText: string;
+  channelHandle: string;
+}
+
+interface ChannelData {
+  meta: ChannelMeta;
+  data: Video[];
+}
+
+const route = useRoute();
+const router = useRouter();
+const channelID = ref<string>(route.params.id as string);
+const ChannelData = ref<ChannelData | null>(null);
+const loading = ref<boolean>(true);
+
+const formatNumber = (value: number | null): string => {
+  if (value !== null && value >= 1_000_000) return `${(value / 1_000_000).toFixed(1)}m`;
+  if (value !== null && value >= 1_000) return `${(value / 1_000).toFixed(1)}k`;
+  return value !== null ? value.toString() : '0';
+};
+
+const fetchData = async (): Promise<void> => {
   const url = `https://yt-api.p.rapidapi.com/channel/videos?id=${channelID.value}`;
   const options = {
     method: 'GET',
     headers: {
-      'x-rapidapi-key': '3b7a0ef5f1msha3a7cf231bf6c24p1229a7jsn582f6d9f7cfb',
-      'x-rapidapi-host': 'yt-api.p.rapidapi.com',
-    },
+    'x-rapidapi-key': '3b7a0ef5f1msha3a7cf231bf6c24p1229a7jsn582f6d9f7cfb',
+    'x-rapidapi-host': 'yt-api.p.rapidapi.com',
+  },
   };
-  
-  // Fetch data from the API
-  async function fetchData() {
-    try {
-      console.log("calling API...");
-      const response = await fetch(url, options);
-      const result = await response.json();
-      console.log("API response:", result); 
-      // Log full response to inspect
-      if (result && result.data) {
-        ChannelData.value = result; // Store data in ChannelData if it exists
-        console.log(ChannelData.value.meta.banner[0].url)
-      } else {
-        console.error("No data found in the response");
-      }
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    } finally {
-      loading.value = false; // Hide the loader when data is fetched
-    }
-  }
-  
-  // Ensure the API call is made after the component is mounted
-  onMounted(() => {
-    fetchData(); // Call the fetchData function after the component is mounted
-  });
 
-  function goToVideo(videoId) {
-    router.push({ name: 'Video', params: { id: videoId } });
-}
-function gotoChannelvideos(channelID){
-    router.push({ name: 'ChannelVideos', params: { id: channelID } });
-}
-  </script>
-  
-  
-  <style lang="scss" scoped>
-  /* Add any specific styles here */
-  </style>
-  
+  try {
+    const response = await fetch(url, options);
+    const result = await response.json();
+    if (result?.data) {
+      ChannelData.value = result as ChannelData;
+    } else {
+      console.error('No data found');
+    }
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  } finally {
+    loading.value = false;
+  }
+};
+
+const goToVideo = (videoId: string): void => {
+  router.push({ name: 'Video', params: { id: videoId } });
+};
+
+const gotoChannelVideos = (channelID: string): void => {
+  router.push({ name: 'ChannelVideos', params: { id: channelID } });
+};
+
+onMounted(fetchData);
+</script>
+
+<style lang="scss" scoped>
+/* Add any specific styles here */
+</style>
