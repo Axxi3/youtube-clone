@@ -52,12 +52,6 @@
       />
     </div>
 
-    <!-- More Content -->
-    <div v-if="!loading" class="w-full flex items-center justify-between pr-5">
-      <h2 class="text-2xl font-semibold mt-8 pl-5 text-white">Latest Video</h2>
-      <p class="text-white" @click="gotoChannelVideos(channelID)">See more</p>
-    </div>
-
     <!-- Video Cards -->
     <div v-if="!loading && ChannelData?.data" class="grid 2xl:grid-cols-5 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-3 sm:grid-cols-2 mr-3.5 pt-4">
       <VideoCard
@@ -65,45 +59,26 @@
         :key="index"
         :title="video.title"
         :user="video.channelTitle"
-        :views="video.viewCount + ' - ' + video.publishedTimeText"
-        :thumbnail="video.thumbnail?.[0]?.url ?? ''"
+        :views="formatNumber(video.viewCount) + ' - ' + video.publishedTimeText"
+        :thumbnail="video.thumbnail[0]?.url ?? ''"
         :videoUrl="video.videoUrl"
+        :image="ChannelData?.meta?.avatar?.[0]?.url"
         @click="goToVideo(video.videoId)"
       />
     </div>
   </NavLayout>
 </template>
 
-
 <script lang="ts" setup>
 import VideoPreview from '../components/VideoPreview.vue';
 import NavLayout from '../Layouts/NavLayout.vue';
 import VideoCard from '../components/VideoCard.vue';
-import { onMounted, ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import axios from 'axios';  // Import axios
 
-interface Video {
-  videoId: string;
-  title: string;
-  thumbnail: { url: string }[];
-  channelTitle: string;
-  viewCount: number;
-  publishedTimeText: string;
-  videoUrl: string;
-}
-
-interface ChannelMeta {
-  avatar: { url: string }[];
-  banner: { url: string }[];
-  title: string;
-  subscriberCountText: string;
-  channelHandle: string;
-}
-
-interface ChannelData {
-  meta: ChannelMeta;
-  data: Video[];
-}
+import { ChannelData, Video } from '../Services/Dataprovider';  // Import the interfaces
+import { apiConfig } from '../Services/Config';
 
 const route = useRoute();
 const router = useRouter();
@@ -111,25 +86,22 @@ const channelID = ref<string>(route.params.id as string);
 const ChannelData = ref<ChannelData | null>(null);
 const loading = ref<boolean>(true);
 
+// Format number (views)
 const formatNumber = (value: number | null): string => {
   if (value !== null && value >= 1_000_000) return `${(value / 1_000_000).toFixed(1)}m`;
   if (value !== null && value >= 1_000) return `${(value / 1_000).toFixed(1)}k`;
   return value !== null ? value.toString() : '0';
 };
 
+// Fetch data using axios
 const fetchData = async (): Promise<void> => {
   const url = `https://yt-api.p.rapidapi.com/channel/videos?id=${channelID.value}`;
-  const options = {
-    method: 'GET',
-    headers: {
-    'x-rapidapi-key': '3b7a0ef5f1msha3a7cf231bf6c24p1229a7jsn582f6d9f7cfb',
-    'x-rapidapi-host': 'yt-api.p.rapidapi.com',
-  },
-  };
+ 
 
   try {
-    const response = await fetch(url, options);
-    const result = await response.json();
+    const response = await axios.get(url, apiConfig);
+    const result = response.data;
+
     if (result?.data) {
       ChannelData.value = result as ChannelData;
     } else {
@@ -142,17 +114,15 @@ const fetchData = async (): Promise<void> => {
   }
 };
 
+// Navigate to a specific video
 const goToVideo = (videoId: string): void => {
   router.push({ name: 'Video', params: { id: videoId } });
 };
 
-const gotoChannelVideos = (channelID: string): void => {
-  router.push({ name: 'ChannelVideos', params: { id: channelID } });
-};
-
+// Fetch data on component mount
 onMounted(fetchData);
 </script>
 
 <style lang="scss" scoped>
-/* Add any specific styles here */
+/* Your component specific styles here */
 </style>

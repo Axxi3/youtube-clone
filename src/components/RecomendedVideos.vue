@@ -34,7 +34,7 @@
         {{ (vid.user || '').substring(0, 30) }}
         <CheckCircle fillColor="#888888" :size="17" />
       </div>
-      <div class="text-sm mb-1 text-gray-700 cursor-pointer">
+      <div class="text-sm mb-1 text-white cursor-pointer">
         {{ vid.views || '' }}
       </div>
     </div>

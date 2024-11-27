@@ -1,5 +1,5 @@
 <template>
-  <NavLayout class="container">
+  <NavLayout class="container" :prompt="route.params.query as string">
     <div class="flex flex-col gap-5">
       <!-- Render video cards dynamically -->
       <SearchResults
@@ -17,6 +17,8 @@ import { onMounted, ref } from 'vue';
 import SearchResults from '../components/SearchResults.vue';
 import NavLayout from '../Layouts/NavLayout.vue';
 import { useRoute, useRouter } from 'vue-router';
+import axios from 'axios';
+import { apiConfig } from '../Services/Config';
 
 // Define type for individual video
 interface Video {
@@ -40,19 +42,13 @@ const query = ref<string>(route.params.query as string);
 
 // API configuration
 const url = `https://yt-api.p.rapidapi.com/search?query=${query.value}`;
-const options = {
-  method: 'GET',
-  headers: {
-    'x-rapidapi-key': '3b7a0ef5f1msha3a7cf231bf6c24p1229a7jsn582f6d9f7cfb',
-    'x-rapidapi-host': 'yt-api.p.rapidapi.com',
-  },
-};
 
-// Fetch data from the API
+
+// Fetch data from the API using axios
 const fetchData = async (): Promise<void> => {
   try {
-    const response = await fetch(url, options);
-    const result = await response.json();
+    const response = await axios.get(url, apiConfig);
+    const result = response.data;
 
     // Filter only objects with type "video"
     videoData.value = (result.data || []).filter((item: Video) => item.type === 'video');

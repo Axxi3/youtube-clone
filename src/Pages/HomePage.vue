@@ -19,6 +19,8 @@ import { onMounted, ref } from 'vue';
 import VideoCard from '../components/VideoCard.vue';
 import NavLayout from '../Layouts/NavLayout.vue';
 import { useRouter } from 'vue-router';
+import axios from 'axios';
+import { apiConfig } from '../Services/Config';
 
 const router = useRouter();
 
@@ -42,22 +44,15 @@ const formatNumber = (value: number | null): string => {
 const videoData = ref<any[]>([]);
 
 const url = 'https://yt-api.p.rapidapi.com/home';
-const options = {
-  method: 'GET',
-  headers: {
-    'x-rapidapi-key': '3b7a0ef5f1msha3a7cf231bf6c24p1229a7jsn582f6d9f7cfb',
-    'x-rapidapi-host': 'yt-api.p.rapidapi.com',
-  },
-};
+
 
 const fetchData = async (): Promise<void> => {
   try {
-    const response = await fetch(url, options);
-    const result = await response.json();
-    console.log('API response:', result.data);
+     const response = await axios.get(url, apiConfig);
+    console.log('API response:', response.data);
 
     // Filter only objects with type "video"
-    videoData.value = (result.data || []).filter((item: any) => item.type === 'video');
+    videoData.value = (response.data.data || []).filter((item: any) => item.type === 'video');
   } catch (error) {
     console.error('Error fetching data:', error);
   }

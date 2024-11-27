@@ -33,7 +33,9 @@
                 {{ videoData.channelTitle }}
                 <CheckCircle fillColor="#888888" :size="17" />
               </div>
-              <div class="text-sm mb-1 text-gray-400 font-bold">1k views - 3 days ago</div>
+              <div class="text-sm mb-1 text-gray-400 font-bold">
+                <span>{{ generateRandomSubscribers() }} subscribers</span>
+              </div>
             </div>
           </div>
 
@@ -100,6 +102,8 @@ import ThumbUpOutline from 'vue-material-design-icons/ThumbUpOutline.vue';
 import ThumbDownOutline from 'vue-material-design-icons/ThumbDownOutline.vue';
 import CheckCircle from 'vue-material-design-icons/CheckCircle.vue';
 import loader from '../assets/loader.gif';
+import axios from 'axios';
+import { apiConfig } from '../Services/Config';
 
 const route = useRoute();
 const router = useRouter();
@@ -108,37 +112,27 @@ const loading = ref<boolean>(true);
 const videoData = ref<any>({});
 const RecomData = ref<any[]>([]);
 const comments = ref<any>({ data: [], commentsCount: 0 });
+const subscribers = ref<string>('Loading...');
 
 const PlayLink = `https://www.youtube.com/embed/${videoId.value}?autoplay=1`;
 
-const apiHeaders = {
-  'x-rapidapi-key': '3b7a0ef5f1msha3a7cf231bf6c24p1229a7jsn582f6d9f7cfb',
-  'x-rapidapi-host': 'yt-api.p.rapidapi.com',
-};
+const apiHeaders = apiConfig
 
 const fetchVideoData = async () => {
   try {
-    const response = await fetch(`https://yt-api.p.rapidapi.com/video/info?id=${videoId.value}`, {
-      method: 'GET',
-      headers: apiHeaders,
-    });
-    const result = await response.json();
-    videoData.value = result;
+    const response = await axios.get(`https://yt-api.p.rapidapi.com/video/info?id=${videoId.value}`, 
+      apiHeaders,
+    );
+    videoData.value = response.data;
   } catch (error) {
     console.error('Error fetching video data:', error);
-  } finally {
-    loading.value = false;
   }
 };
 
 const fetchRecommendedVideos = async () => {
   try {
-    const response = await fetch(`https://yt-api.p.rapidapi.com/related?id=${videoId.value}`, {
-      method: 'GET',
-      headers: apiHeaders,
-    });
-    const result = await response.json();
-    RecomData.value = result.data || [];
+    const response = await axios.get(`https://yt-api.p.rapidapi.com/related?id=${videoId.value}`,apiHeaders);
+    RecomData.value = response.data.data || [];
   } catch (error) {
     console.error('Error fetching recommended videos:', error);
   }
@@ -146,25 +140,33 @@ const fetchRecommendedVideos = async () => {
 
 const fetchComments = async () => {
   try {
-    const response = await fetch(`https://yt-api.p.rapidapi.com/comments?id=${videoId.value}`, {
-      method: 'GET',
-      headers: apiHeaders,
-    });
-    const result = await response.json();
-    comments.value = result || { data: [], commentsCount: 0 };
+    const response = await axios.get(`https://yt-api.p.rapidapi.com/comments?id=${videoId.value}`,apiHeaders);
+    comments.value = response.data || { data: [], commentsCount: 0 };
   } catch (error) {
     console.error('Error fetching comments:', error);
   }
 };
 
+
+
 watch(() => route.params.id, async (newId) => {
   videoId.value = newId as string;
   loading.value = true;
-  await Promise.all([fetchVideoData(), fetchRecommendedVideos(), fetchComments()]);
+  await Promise.all([
+    fetchVideoData(),
+    fetchRecommendedVideos(),
+    fetchComments(),
+  ]);
+  loading.value = false;
 });
 
 onMounted(async () => {
-  await Promise.all([fetchVideoData(), fetchRecommendedVideos(), fetchComments()]);
+  await Promise.all([
+    fetchVideoData(),
+    fetchRecommendedVideos(),
+    fetchComments(),
+  ]);
+  loading.value = false;
 });
 
 const goToVideo = (id: string) => {
@@ -173,6 +175,20 @@ const goToVideo = (id: string) => {
 
 const gotoChannelHome = (id: string) => {
   router.push({ name: 'Channel', params: { id } });
+};
+
+const generateRandomSubscribers = (): string => {
+  // Generate a random number between 10,000 and 1,000,000
+  const randomNumber = Math.floor(Math.random() * (1_000_000 - 10_000 + 1)) + 10_000;
+
+  // Convert the number to a short format (e.g., 1000 -> "1K", 1000000 -> "1M")
+  if (randomNumber >= 1_000_000) {
+    return `${(randomNumber / 1_000_000).toFixed(1).replace(/\.0$/, '')}M`;
+  } else if (randomNumber >= 1_000) {
+    return `${(randomNumber / 1_000).toFixed(1).replace(/\.0$/, '')}K`;
+  } else {
+    return randomNumber.toString(); // For numbers below 1K (unlikely in this case)
+  }
 };
 </script>
 
