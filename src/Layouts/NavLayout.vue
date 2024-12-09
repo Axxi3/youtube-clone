@@ -45,15 +45,19 @@
       >
         <!-- Side Navigation Content -->
         <ul class="sm:mt-[60px] mt-[30px] w-full" :class="[!openSideNav ? 'p-2' : 'px-5 pb-2 pt-[7px]']">
-          <SideNavItems :openSideNav="openSideNav" iconString="Home" />
-          <SideNavItems :openSideNav="openSideNav" iconString="Trending" />
-          <SideNavItems :openSideNav="openSideNav" iconString="Gaming" />
-          <SideNavItems :openSideNav="openSideNav" iconString="Music" />
-          <SideNavItems :openSideNav="openSideNav" iconString="News" />
+          <SideNavItems
+      v-for="(item, index) in sideNavItems"
+      :key="index"
+      :openSideNav="openSideNav"
+      :iconString="item.iconString"
+    />
           <div class="border-b border-b-gray-700 my-2.5"></div>
-          <SideNavItems :openSideNav="openSideNav" iconString="Subscriptions" />
-          <SideNavItems :openSideNav="openSideNav" iconString="Liked" />
-          <SideNavItems :openSideNav="openSideNav" iconString="Watch Later" />
+          <SideNavItems
+      v-for="(item, index) in sideNavItems2"
+      :key="index"
+      :openSideNav="openSideNav"
+      :iconString="item.iconString"
+    />
           <div v-if="openSideNav">
             <div class="border-b border-b-gray-700 my-2.5"></div>
             <div class="text-gray-400 text-[14px] text-extrabold">
@@ -92,15 +96,19 @@
               </div>
             </div>
           </div>
-          <SideNavItems :openSideNav="openSideNav" iconString="Home" />
-          <SideNavItems :openSideNav="openSideNav" iconString="Trending" />
-          <SideNavItems :openSideNav="openSideNav" iconString="Gaming" />
-          <SideNavItems :openSideNav="openSideNav" iconString="Music" />
-          <SideNavItems :openSideNav="openSideNav" iconString="News" />
+          <SideNavItems
+      v-for="(item, index) in sideNavItems"
+      :key="index"
+      :openSideNav="openSideNav"
+      :iconString="item.iconString"
+    />
           <div class="border-b border-b-gray-700 my-2.5"></div>
-          <SideNavItems :openSideNav="openSideNav" iconString="Subscriptions" />
-          <SideNavItems :openSideNav="openSideNav" iconString="Liked" />
-          <SideNavItems :openSideNav="openSideNav" iconString="Watch Later" />
+          <SideNavItems
+      v-for="(item, index) in sideNavItems2"
+      :key="index"
+      :openSideNav="openSideNav"
+      :iconString="item.iconString"
+    />
           <div v-if="openSideNav" class="text-gray-400 text-[14px] font-extrabold mt-2">
             <div>About Press Copyright</div>
             <div>Contact Us</div>
@@ -141,6 +149,22 @@
       default: ''
     }
   });
+
+  const sideNavItems = [
+  { iconString: "Home" },
+  { iconString: "Trending" },
+  { iconString: "Gaming" },
+  { iconString: "Music" },
+  { iconString: "News" },
+];
+
+const sideNavItems2=[
+{ iconString: "Subscriptions" },
+  { iconString: "Liked" },
+  { iconString: "Watch Later" },
+]
+
+
   
   const searchText = ref(props.prompt || ''); // Initialize with prop value or empty string
   const openSideNav = ref(false);

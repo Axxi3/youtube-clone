@@ -13,29 +13,41 @@
     </div>
 
     <!-- Profile Section -->
-    <div v-if="!loading && ChannelData" class="flex flex-col sm:flex-row items-center px-6 pt-6 space-y-4 sm:space-y-0">
-      <img
-        :src="ChannelData?.meta?.avatar?.[0]?.url ?? ''"
-        alt="Profile"
-        class="w-24 h-24 sm:w-32 sm:h-32 rounded-full border-4 border-gray-800 mx-auto sm:mx-0"
-      />
-      <div class="sm:ml-6 text-center sm:text-left">
-        <h1 class="text-2xl sm:text-3xl font-semibold text-white">
-          {{ ChannelData?.meta?.title ?? ' ' }}
-        </h1>
-        <p class="text-gray-700 text-sm sm:text-lg">
-          {{ ChannelData?.meta?.subscriberCountText ?? '' }} subscribers
-        </p>
-        <a href="https://instagram.com/" class="text-blue-500 hover:underline mt-1 text-sm sm:text-lg">
-          {{ ChannelData?.meta?.channelHandle ?? '' }}
-        </a>
-      </div>
-      <button
-        class="mt-4 sm:mt-0 sm:ml-auto bg-red-500 hover:bg-red-600 rounded-2xl text-white font-semibold px-4 py-2 sm:px-6 sm:py-3"
-      >
-        Subscribe
-      </button>
-    </div>
+  
+<div v-if="!loading && ChannelData" class="flex flex-row sm:flex-row items-center px-6 pt-6 space-y-4 sm:space-y-0">
+  <!-- Profile Image -->
+  <img
+    :src="ChannelData?.meta?.avatar?.[0]?.url ?? ''"
+    alt="Profile"
+    class="w-24 h-24 sm:w-32 sm:h-32 rounded-full border-4 border-gray-800 mx-auto sm:mx-0"
+  />
+
+  <!-- Profile Info -->
+  <div class="sm:ml-6 text-center sm:text-left">
+    <h1 class="text-2xl sm:text-3xl font-semibold text-white">
+      {{ ChannelData?.meta?.title ?? ' ' }}
+    </h1>
+    <p class="text-gray-400 text-sm sm:text-lg">
+      {{ ChannelData?.meta?.subscriberCountText ?? '' }} subscribers · 
+      {{ ChannelData?.meta?.videosCountText ?? '0 videos' }}
+    </p>
+   
+    <a
+      :href='"#"'
+      class="text-blue-500 hover:underline mt-1 text-sm sm:text-lg"
+    >
+      {{ ChannelData?.meta?.channelHandle ?? '' }}
+    </a>
+  </div>
+
+  <!-- Subscribe Button -->
+  <button
+    class="mt-4 sm:mt-0 sm:ml-auto bg-red-500 hover:bg-red-600 rounded-2xl text-white font-semibold px-4 py-2 sm:px-6 sm:py-3"
+  >
+    Subscribe
+  </button>
+</div>
+
 
     <!-- Recommended Videos Section -->
     <div v-if="!loading && ChannelData?.data?.[0]" class="p-2" @click="goToVideo(ChannelData.data[0]?.videoId)">
@@ -75,10 +87,8 @@ import NavLayout from '../Layouts/NavLayout.vue';
 import VideoCard from '../components/VideoCard.vue';
 import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import axios from 'axios';  // Import axios
-
-import { ChannelData, Video } from '../Services/Dataprovider';  // Import the interfaces
-import { apiConfig } from '../Services/Config';
+import { ChannelData } from '../Services/Dataprovider'; // Import the interfaces
+import { getChannelVideos } from '../Services/API'; // Import the API function
 
 const route = useRoute();
 const router = useRouter();
@@ -93,22 +103,17 @@ const formatNumber = (value: number | null): string => {
   return value !== null ? value.toString() : '0';
 };
 
-// Fetch data using axios
-const fetchData = async (): Promise<void> => {
-  const url = `https://yt-api.p.rapidapi.com/channel/videos?id=${channelID.value}`;
- 
-
+// Fetch channel videos using the API function
+const fetchChannelVideos = async (): Promise<void> => {
   try {
-    const response = await axios.get(url, apiConfig);
-    const result = response.data;
-
-    if (result?.data) {
-      ChannelData.value = result as ChannelData;
+    const data = await getChannelVideos(channelID.value);
+    if (data) {
+      ChannelData.value = data;
     } else {
-      console.error('No data found');
+      console.error('No channel data found');
     }
   } catch (error) {
-    console.error('Error fetching data:', error);
+    console.error('Error fetching channel videos:', error);
   } finally {
     loading.value = false;
   }
@@ -120,8 +125,9 @@ const goToVideo = (videoId: string): void => {
 };
 
 // Fetch data on component mount
-onMounted(fetchData);
+onMounted(fetchChannelVideos);
 </script>
+
 
 <style lang="scss" scoped>
 /* Your component specific styles here */

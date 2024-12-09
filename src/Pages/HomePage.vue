@@ -7,7 +7,8 @@
         :title="video.title || 'No title available'"
         :thumbnail="video.thumbnail?.[0]?.url || 'https://via.placeholder.com/360x202'"
         :image="video.channelThumbnail?.[0]?.url || 'https://via.placeholder.com/360x202'"
-        :views="`${formatNumber(video.viewCount)} ${video.publishedTimeText}` || 'N/A'"
+        :views="`${formatNumber(Number(video.viewCount))} ${video.publishedTimeText}` || 'N/A'"
+        :user="video.channelTitle||'N/A'"
         @click="goToVideo(video.videoId)"
       />
     </div>
@@ -19,8 +20,8 @@ import { onMounted, ref } from 'vue';
 import VideoCard from '../components/VideoCard.vue';
 import NavLayout from '../Layouts/NavLayout.vue';
 import { useRouter } from 'vue-router';
-import axios from 'axios';
-import { apiConfig } from '../Services/Config';
+import {  HomeVideo } from '../Services/Dataprovider';
+import { getHomeVideos } from '../Services/API';
 
 const router = useRouter();
 
@@ -41,21 +42,10 @@ const formatNumber = (value: number | null): string => {
   return 'N/A';
 };
 
-const videoData = ref<any[]>([]);
-
-const url = 'https://yt-api.p.rapidapi.com/home';
-
+const videoData = ref<HomeVideo[]>([]);
 
 const fetchData = async (): Promise<void> => {
-  try {
-     const response = await axios.get(url, apiConfig);
-    console.log('API response:', response.data);
-
-    // Filter only objects with type "video"
-    videoData.value = (response.data.data || []).filter((item: any) => item.type === 'video');
-  } catch (error) {
-    console.error('Error fetching data:', error);
-  }
+  videoData.value = await getHomeVideos();
 };
 
 onMounted(fetchData);

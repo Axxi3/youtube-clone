@@ -25,11 +25,11 @@
           <div class="px-1.5 text-white mt-1">
             <div class="flex">
               <div class="text-[17px] font-semibold w-full cursor-pointer">
-              {{ (title || '').substring(0, 26) }}
+              {{ (title || '').substring(0, 20) }}
             </div>
             
             </div>
-            
+            <div class="text-s mb-1 text-white cursor-pointer">{{ user.substring(0, 16) || '' }}</div>
             <div class="text-s mb-1 text-white cursor-pointer">{{ views || '' }}</div>
           </div>
         </div>
@@ -51,6 +51,7 @@ export default {
     image: { type: String, default: '' },
     videoUrl: { type: String, default: '' },
     thumbnail: { type: String, default: '' },
+    channelTitle: { type: String, default: '' },
   },
   setup(props) {
     // Destructure props

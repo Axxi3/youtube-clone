@@ -1,11 +1,11 @@
 <template>
-  <div v-if="loading">
+  <div v-if="loading && videoData==null">
     <div class="w-[90vw] h-[90vh] flex items-center justify-center">
       <img :src="loader" alt="Loading" sizes="30" />
     </div>
   </div>
 
-  <div v-else>
+  <div v-else-if="videoData!==null">
     <NavLayout>
       <div class="xl:flex">
         <div class="p-3 lg:w-[65%] w-full">
@@ -22,7 +22,7 @@
             {{ videoData.title }}
           </div>
 
-          <div @click="gotoChannelHome(videoData.channelId)" class="flex items-center mb-4">
+          <div @click="gotoChannelHome(videoData?.channelId)" class="flex items-center mb-4">
             <img
               class="rounded-full m-1.5 mt-2 flex items-baseline w-8 h-8"
               :src="'https://picsum.photos/id/' + (Math.random() * 100).toFixed(0) + '/100'"
@@ -41,7 +41,7 @@
 
           <div class="bg-[#3f3f3f] rounded-lg w-full p-3 text-white">
             <div class="text-white text-lg font-extrabold">1k views - 3 days ago</div>
-            <div class="text-sm font-regular">
+            <div class="text-sm font-regular" v-if="videoData!==null">
               {{ videoData.description }}
             </div>
           </div>
@@ -102,70 +102,39 @@ import ThumbUpOutline from 'vue-material-design-icons/ThumbUpOutline.vue';
 import ThumbDownOutline from 'vue-material-design-icons/ThumbDownOutline.vue';
 import CheckCircle from 'vue-material-design-icons/CheckCircle.vue';
 import loader from '../assets/loader.gif';
-import axios from 'axios';
-import { apiConfig } from '../Services/Config';
+import { getVideoInfo, getRelatedVideos, getComments } from '../Services/API'; // Import API functions
+import { Video, HomeVideo, CommentsResponse } from '../Services/Dataprovider'; // Import types
 
 const route = useRoute();
 const router = useRouter();
 const videoId = ref<string>(route.params.id as string);
 const loading = ref<boolean>(true);
-const videoData = ref<any>({});
-const RecomData = ref<any[]>([]);
-const comments = ref<any>({ data: [], commentsCount: 0 });
-const subscribers = ref<string>('Loading...');
-
+const videoData = ref<Video | null>(null); // Updated with type
+const RecomData = ref<HomeVideo[]>([]); // Updated with type
+const comments = ref<CommentsResponse>({ data: [], commentsCount: 0 }); // Updated with type
 const PlayLink = `https://www.youtube.com/embed/${videoId.value}?autoplay=1`;
 
-const apiHeaders = apiConfig
-
 const fetchVideoData = async () => {
-  try {
-    const response = await axios.get(`https://yt-api.p.rapidapi.com/video/info?id=${videoId.value}`, 
-      apiHeaders,
-    );
-    videoData.value = response.data;
-  } catch (error) {
-    console.error('Error fetching video data:', error);
-  }
+  videoData.value = await getVideoInfo(videoId.value);
 };
 
 const fetchRecommendedVideos = async () => {
-  try {
-    const response = await axios.get(`https://yt-api.p.rapidapi.com/related?id=${videoId.value}`,apiHeaders);
-    RecomData.value = response.data.data || [];
-  } catch (error) {
-    console.error('Error fetching recommended videos:', error);
-  }
+  RecomData.value = await getRelatedVideos(videoId.value);
 };
 
 const fetchComments = async () => {
-  try {
-    const response = await axios.get(`https://yt-api.p.rapidapi.com/comments?id=${videoId.value}`,apiHeaders);
-    comments.value = response.data || { data: [], commentsCount: 0 };
-  } catch (error) {
-    console.error('Error fetching comments:', error);
-  }
+  comments.value = await getComments(videoId.value);
 };
-
-
 
 watch(() => route.params.id, async (newId) => {
   videoId.value = newId as string;
   loading.value = true;
-  await Promise.all([
-    fetchVideoData(),
-    fetchRecommendedVideos(),
-    fetchComments(),
-  ]);
+  await Promise.all([fetchVideoData(), fetchRecommendedVideos(), fetchComments()]);
   loading.value = false;
 });
 
 onMounted(async () => {
-  await Promise.all([
-    fetchVideoData(),
-    fetchRecommendedVideos(),
-    fetchComments(),
-  ]);
+  await Promise.all([fetchVideoData(), fetchRecommendedVideos(), fetchComments()]);
   loading.value = false;
 });
 
@@ -178,19 +147,17 @@ const gotoChannelHome = (id: string) => {
 };
 
 const generateRandomSubscribers = (): string => {
-  // Generate a random number between 10,000 and 1,000,000
   const randomNumber = Math.floor(Math.random() * (1_000_000 - 10_000 + 1)) + 10_000;
-
-  // Convert the number to a short format (e.g., 1000 -> "1K", 1000000 -> "1M")
   if (randomNumber >= 1_000_000) {
     return `${(randomNumber / 1_000_000).toFixed(1).replace(/\.0$/, '')}M`;
   } else if (randomNumber >= 1_000) {
     return `${(randomNumber / 1_000).toFixed(1).replace(/\.0$/, '')}K`;
   } else {
-    return randomNumber.toString(); // For numbers below 1K (unlikely in this case)
+    return randomNumber.toString();
   }
 };
 </script>
+
 
 <style scoped>
 /* Add any required scoped styles here */
