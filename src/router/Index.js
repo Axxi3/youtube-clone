@@ -3,7 +3,6 @@ import HomePage from '../Pages/HomePage.vue';
 import Video from '../Pages/Video.vue';
 
 import ChannelHome from '../Pages/ChannelHome.vue';
-import ChannelVideosPage from '../Pages/ChannelVideosPage.vue';
 
 import Search from '../Pages/Search.vue';
 
@@ -27,11 +26,11 @@ const routes = [
 
   
   
-  {
-    path: '/channel/videos/:id',
-    name: 'ChannelVideos',
-    component: ChannelVideosPage,
-  },
+  // {
+  //   path: '/channel/videos/:id',
+  //   name: 'ChannelVideos',
+  //   component: ChannelVideosPage,
+  // },
   {
     path: '/search/:query',
     name: 'Search',

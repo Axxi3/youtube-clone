@@ -1,5 +1,5 @@
 <template>
-  <NavLayout class="container" >
+  <NavLayout class="container" :prompt="query" >
     <div class="flex flex-col gap-5">
       <!-- Render video cards dynamically -->
       <SearchResults
@@ -26,27 +26,17 @@ const route = useRoute(); // Access route parameters
 const router = useRouter(); // For navigation
 const query = ref<string>(route.params.query as string); // Current search query
 
-// Fetch search results using the API
-const fetchSearchResults = async (): Promise<void> => {
-  try {
-    videoData.value = await getSearchResults(query.value); // Use the API method
-    console.log('Fetched search results:', videoData.value);
-  } catch (error) {
-    console.error('Error fetching search results:', error);
-  }
-};
+// Use the getSearchResults function from API.ts directly
+onMounted(async () => {
+  videoData.value = await getSearchResults(query.value);
+  console.log('Fetched search results:', videoData.value);
+});
 
 // Navigate to video page
 const goToVideo = (id: string): void => {
   router.push({ name: 'Video', params: { id } });
 };
-
-// Fetch data when the component is mounted
-onMounted(() => {
-  fetchSearchResults();
-});
 </script>
-
 
 <style scoped>
 /* Add your styles here */

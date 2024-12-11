@@ -105,19 +105,15 @@ const formatNumber = (value: number | null): string => {
 
 // Fetch channel videos using the API function
 const fetchChannelVideos = async (): Promise<void> => {
-  try {
-    const data = await getChannelVideos(channelID.value);
-    if (data) {
-      ChannelData.value = data;
-    } else {
-      console.error('No channel data found');
-    }
-  } catch (error) {
-    console.error('Error fetching channel videos:', error);
-  } finally {
-    loading.value = false;
+  const data = await getChannelVideos(channelID.value);
+  if (data) {
+    ChannelData.value = data;
+  } else {
+    console.error('No channel data found');
   }
+  loading.value = false;
 };
+
 
 // Navigate to a specific video
 const goToVideo = (videoId: string): void => {
